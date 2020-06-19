@@ -1,3 +1,3 @@
 [submodule "deno_typescript"]
-	path = deno_typescript
-	url = https://github.com/denoland/deno.git
+    path = deno_typescript
+    url = https://github.com/denoland/deno.git

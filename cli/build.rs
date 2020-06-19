@@ -40,6 +40,9 @@ fn main() {
   let c = PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
   let o = PathBuf::from(env::var_os("OUT_DIR").unwrap());
 
+  // typescript loader
+  let t = c.parent().unwrap();
+
   // Main snapshot
   let root_names = vec![c.join("js/main.ts")];
   let bundle_path = o.join("CLI_SNAPSHOT.js");
@@ -99,6 +102,19 @@ fn main() {
     "lib.deno.unstable.d.ts".to_string(),
     c.join("js/lib.deno.unstable.d.ts"),
   );
+
+  // Add deno TS system loader
+  custom_libs.insert(
+    "system_loader_es5.js".to_string(),
+    t.join("deno_typescript/system_loader_es5.js"),
+  );
+
+  custom_libs.insert(
+    "system_loader.js".to_string(),
+    t.join("deno_typescript/system_loader.js"),
+  );
+
+  // Register our OP
   runtime_isolate.register_op(
     "op_fetch_asset",
     deno_typescript::op_fetch_asset(custom_libs),
