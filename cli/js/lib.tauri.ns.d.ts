@@ -4,6 +4,14 @@
 /// <reference lib="esnext" />
 
 declare namespace Tauri {
-  /** The current process id of the runtime. */
-  export function run(): void;
+  export interface BrowserOptions {
+    title?: String;
+    url?: String;
+    width?: Number;
+    height?: Number;
+    resizable?: boolean;
+    debug?: boolean;
+  }
+
+  export function run(option: BrowserOptions): Promise<Number>;
 }

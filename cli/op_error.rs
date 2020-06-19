@@ -51,6 +51,7 @@ pub enum ErrorKind {
   /// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
   Other = 22,
   Busy = 23,
+  WebView = 1000,
 }
 
 #[derive(Debug)]
@@ -226,6 +227,22 @@ impl From<&url::ParseError> for OpError {
     }
   }
 }
+
+impl From<web_view::Error> for OpError {
+  fn from(error: web_view::Error) -> Self {
+    OpError::from(&error)
+  }
+}
+
+impl From<&web_view::Error> for OpError {
+  fn from(error: &web_view::Error) -> Self {
+    Self {
+      kind: ErrorKind::WebView,
+      msg: error.to_string(),
+    }
+  }
+}
+
 impl From<reqwest::Error> for OpError {
   fn from(error: reqwest::Error) -> Self {
     OpError::from(&error)
