@@ -1,15 +1,4 @@
-import { open_webview } from "./ops/tauri.ts";
-
-interface BrowserOptions {
-  title: String;
-  url: String;
-  width: Number;
-  height: Number;
-  resizable: boolean;
-  debug: boolean;
-}
-
-export function run(option: BrowserOptions): Promise<Number>;
+import { open_webview, BrowserOptions } from "./ops/tauri.ts";
 
 export function run(option: BrowserOptions): Promise<Number> {
   console.log("running'!!");
