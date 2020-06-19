@@ -120,13 +120,9 @@ jobs:
           restore-keys: |
             ${{ matrix.config.os }}-${{ matrix.config.kind }}-
 
-      - name: lint.py
+      - name: lint
         if: matrix.config.kind == 'lint'
-        run: python ./tools/lint.py
-
-      - name: test_format.py
-        if: matrix.config.kind == 'lint'
-        run: python ./tools/test_format.py
+        run: cargo clippy --all-targets --locked
 
       - name: Build release
         if: |
