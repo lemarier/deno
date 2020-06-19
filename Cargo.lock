@@ -469,8 +469,9 @@ dependencies = [
 [[package]]
 name = "deno_core"
 version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2a2cd585592df5baa9b743e486d44cc9b0c1c54b730d7dbe381f405583556335"
 dependencies = [
- "derive_deref",
  "downcast-rs",
  "futures 0.3.5",
  "lazy_static",
@@ -478,7 +479,6 @@ dependencies = [
  "log 0.4.8",
  "rusty_v8",
  "serde_json",
- "tokio",
  "url 2.1.1",
 ]
 
@@ -500,21 +500,12 @@ dependencies = [
 [[package]]
 name = "deno_typescript"
 version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8e5e5f55446df25b74b28a7ff304dcf0a09a69b0cdd4774e55d914eb5ef9cc7f"
 dependencies = [
  "deno_core",
  "serde",
  "serde_json",
-]
-
-[[package]]
-name = "derive_deref"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11554fdb0aa42363a442e0c4278f51c9621e20c1ce3bac51d79e60646f3b8b8f"
-dependencies = [
- "proc-macro2 0.4.30",
- "quote 0.6.13",
- "syn 0.15.44",
 ]
 
 [[package]]
@@ -1000,14 +991,6 @@ dependencies = [
  "tokio",
  "tokio-rustls",
  "webpki",
-]
-
-[[package]]
-name = "hyper_hello"
-version = "0.0.1"
-dependencies = [
- "hyper",
- "tokio",
 ]
 
 [[package]]
@@ -2461,15 +2444,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "test_plugin"
-version = "0.0.1"
-dependencies = [
- "deno_core",
- "futures 0.3.5",
- "test_util",
-]
-
-[[package]]
 name = "test_util"
 version = "0.1.0"
 dependencies = [
@@ -2543,7 +2517,6 @@ dependencies = [
  "mio",
  "mio-named-pipes",
  "mio-uds",
- "num_cpus",
  "pin-project-lite",
  "signal-hook-registry",
  "slab",
