@@ -134,14 +134,6 @@ jobs:
         if: matrix.config.kind == 'test_debug'
         run: cargo build --locked --all-targets
 
-      - name: Test release
-        if: matrix.config.kind == 'test_release'
-        run: cargo test --release --locked --all-targets
-
-      - name: Test debug
-        if: matrix.config.kind == 'test_debug'
-        run: cargo test --locked --all-targets
-
       - name: Worker info
         if: matrix.config.kind == 'bench'
         run: |
