@@ -71,6 +71,9 @@ pub enum DenoSubcommand {
     force: bool,
     version: Option<String>,
   },
+  Tauri {
+    script: String,
+  },
 }
 
 impl Default for DenoSubcommand {
@@ -267,6 +270,8 @@ pub fn flags_from_vec_safe(args: Vec<String>) -> clap::Result<Flags> {
     doc_parse(&mut flags, m);
   } else if let Some(m) = matches.subcommand_matches("lint") {
     lint_parse(&mut flags, m);
+  } else if let Some(m) = matches.subcommand_matches("tauri") {
+    tauri_parse(&mut flags, m);
   } else {
     repl_parse(&mut flags, &matches);
   }
@@ -322,6 +327,7 @@ If the flag is set, restrict these messages to errors.",
     .subcommand(test_subcommand())
     .subcommand(types_subcommand())
     .subcommand(upgrade_subcommand())
+    .subcommand(tauri_subcommand())
     .long_about(DENO_HELP)
     .after_help(ENV_VARIABLES_HELP)
 }
@@ -533,6 +539,24 @@ fn run_parse(flags: &mut Flags, matches: &clap::ArgMatches) {
   }
 
   flags.subcommand = DenoSubcommand::Run { script };
+}
+
+fn tauri_parse(flags: &mut Flags, matches: &clap::ArgMatches) {
+  run_test_args_parse(flags, matches);
+
+  let mut script: Vec<String> = matches
+    .values_of("script_arg")
+    .unwrap()
+    .map(String::from)
+    .collect();
+  assert!(!script.is_empty());
+  let script_args = script.split_off(1);
+  let script = script[0].to_string();
+  for v in script_args {
+    flags.argv.push(v);
+  }
+
+  flags.subcommand = DenoSubcommand::Tauri { script };
 }
 
 fn test_parse(flags: &mut Flags, matches: &clap::ArgMatches) {
@@ -1053,7 +1077,33 @@ Grant permission to read from disk and listen to network:
 
 Grant permission to read allow-listed files from disk:
   deno run --allow-read=/etc https://deno.land/std/http/file_server.ts
-  
+
+Deno allows specifying the filename '-' to read the file from stdin.
+  curl https://deno.land/std/examples/welcome.ts | target/debug/deno run -",
+    )
+}
+
+fn tauri_subcommand<'a, 'b>() -> App<'a, 'b> {
+  run_test_args(SubCommand::with_name("tauri"))
+    .setting(AppSettings::TrailingVarArg)
+    .arg(script_arg())
+    .about("Run a program given a filename or url to the module. Use '-' as a filename to read from stdin. Inject Tauri API, and allow webview use.")
+    .long_about(
+	  "Run a program given a filename or url to the module with Tauri API.
+
+By default all programs are run in sandbox without access to disk, network or
+ability to spawn subprocesses.
+  deno tauri https://deno.land/std/examples/welcome.ts
+
+Grant all permissions:
+  deno tauri -A https://deno.land/std/http/file_server.ts
+
+Grant permission to read from disk and listen to network:
+  deno tauri --allow-read --allow-net https://deno.land/std/http/file_server.ts
+
+Grant permission to read allow-listed files from disk:
+  deno tauri --allow-read=/etc https://deno.land/std/http/file_server.ts
+
 Deno allows specifying the filename '-' to read the file from stdin.
   curl https://deno.land/std/examples/welcome.ts | target/debug/deno run -",
     )

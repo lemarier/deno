@@ -8,6 +8,7 @@
 //   It sets up runtime by providing globals for `WindowScope` and adds `Deno` global.
 
 import * as denoNs from "./deno.ts";
+import * as tauriNs from "./tauri.ts";
 import * as denoUnstableNs from "./deno_unstable.ts";
 import { opMainModule } from "./ops/runtime.ts";
 import { exit } from "./ops/os.ts";
@@ -33,6 +34,7 @@ import { log, immutableDefine } from "./util.ts";
 // This is not exposed as part of the Deno types.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 (denoNs as any)[internalSymbol] = internalObject;
+(tauriNs as any)[internalSymbol] = internalObject;
 
 let windowIsClosing = false;
 
@@ -48,7 +50,7 @@ function windowClose(): void {
           // This should be fine, since only Window/MainWorker has .close()
           exit(0);
         },
-        0
+        0,
       )
     );
   }
@@ -74,6 +76,7 @@ export function bootstrapMainRuntime(): void {
   // Remove bootstrapping methods from global scope
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any).bootstrap = undefined;
+
   log("bootstrapMainRuntime");
   hasBootstrapped = true;
   Object.defineProperties(globalThis, windowOrWorkerGlobalScopeMethods);
@@ -117,6 +120,11 @@ export function bootstrapMainRuntime(): void {
   Object.freeze(globalThis.Deno);
   Object.freeze(globalThis.Deno.core);
   Object.freeze(globalThis.Deno.core.sharedQueue);
+
+  // Make tauri globally available
+  immutableDefine(globalThis, "Tauri", tauriNs);
+  Object.freeze(globalThis.Tauri);
+
   setSignals();
 
   log("cwd", cwd);

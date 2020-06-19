@@ -103,6 +103,12 @@ fn main() {
     c.join("js/lib.deno.unstable.d.ts"),
   );
 
+  // Add global namespace
+  custom_libs.insert(
+    "lib.tauri.ns.d.ts".to_string(),
+    c.join("js/lib.tauri.ns.d.ts"),
+  );
+
   // Add deno TS system loader
   custom_libs.insert(
     "system_loader_es5.js".to_string(),

@@ -4,6 +4,7 @@
 
 /// <reference no-default-lib="true" />
 /// <reference lib="deno.ns" />
+/// <reference lib="tauri.ns" />
 /// <reference lib="deno.shared_globals" />
 /// <reference lib="esnext" />
 
@@ -15,6 +16,7 @@ declare interface Window extends EventTarget {
   close: () => void;
   readonly closed: boolean;
   Deno: typeof Deno;
+  Tauri: typeof Tauri;
 }
 
 declare const window: Window & typeof globalThis;

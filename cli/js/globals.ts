@@ -108,7 +108,7 @@ declare global {
 
     evalContext(
       code: string,
-      scriptName?: string
+      scriptName?: string,
     ): [unknown, EvalErrorInfo | null];
 
     formatError: (e: Error) => string;
@@ -128,6 +128,13 @@ declare global {
     decode(bytes: Uint8Array): string;
     encode(text: string): Uint8Array;
   }
+
+  // Only `var` variables show up in the `globalThis` type when doing a global
+  // scope augmentation.
+  /* eslint-disable no-var */
+
+  // Assigned to global - main runtime
+  var Tauri: {};
 
   // Only `var` variables show up in the `globalThis` type when doing a global
   // scope augmentation.
@@ -154,12 +161,12 @@ declare global {
 
   var onerror:
     | ((
-        msg: string,
-        source: string,
-        lineno: number,
-        colno: number,
-        e: Event
-      ) => boolean | void)
+      msg: string,
+      source: string,
+      lineno: number,
+      colno: number,
+      e: Event,
+    ) => boolean | void)
     | undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -222,7 +229,7 @@ export const windowOrWorkerGlobalScopeProperties = {
   AbortSignal: nonEnumerable(abortSignal.AbortSignalImpl),
   Blob: nonEnumerable(blob.DenoBlob),
   ByteLengthQueuingStrategy: nonEnumerable(
-    queuingStrategy.ByteLengthQueuingStrategyImpl
+    queuingStrategy.ByteLengthQueuingStrategyImpl,
   ),
   CountQueuingStrategy: nonEnumerable(queuingStrategy.CountQueuingStrategyImpl),
   crypto: readOnly(csprng),
@@ -254,10 +261,10 @@ export function setEventTargetData(value: any): void {
 
 export const eventTargetProperties = {
   addEventListener: readOnly(
-    eventTarget.EventTargetImpl.prototype.addEventListener
+    eventTarget.EventTargetImpl.prototype.addEventListener,
   ),
   dispatchEvent: readOnly(eventTarget.EventTargetImpl.prototype.dispatchEvent),
   removeEventListener: readOnly(
-    eventTarget.EventTargetImpl.prototype.removeEventListener
+    eventTarget.EventTargetImpl.prototype.removeEventListener,
   ),
 };

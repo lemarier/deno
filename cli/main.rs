@@ -263,16 +263,18 @@ async fn print_file_info(
 fn get_types(unstable: bool) -> String {
   if unstable {
     format!(
-      "{}\n{}\n{}\n{}",
+      "{}\n{}\n{}\n{}\n{}",
       crate::js::DENO_NS_LIB,
+      crate::js::TAURI_NS_LIB,
       crate::js::SHARED_GLOBALS_LIB,
       crate::js::WINDOW_LIB,
       crate::js::UNSTABLE_NS_LIB,
     )
   } else {
     format!(
-      "{}\n{}\n{}",
+      "{}\n{}\n{}\n{}",
       crate::js::DENO_NS_LIB,
+      crate::js::TAURI_NS_LIB,
       crate::js::SHARED_GLOBALS_LIB,
       crate::js::WINDOW_LIB,
     )
@@ -747,6 +749,11 @@ pub fn main() {
       dry_run,
       version,
     } => upgrade_command(dry_run, force, version).boxed_local(),
+
+    // Tauri Integration
+    DenoSubcommand::Tauri { script } => {
+      run_command(flags, script).boxed_local()
+    }
     _ => unreachable!(),
   };
 

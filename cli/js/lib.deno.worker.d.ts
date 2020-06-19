@@ -4,6 +4,7 @@
 
 /// <reference no-default-lib="true" />
 /// <reference lib="deno.ns" />
+/// <reference lib="tauri.ns" />
 /// <reference lib="deno.shared_globals" />
 /// <reference lib="esnext" />
 
@@ -16,18 +17,19 @@ declare interface DedicatedWorkerGlobalScope {
   close: typeof __workerMain.close;
   postMessage: typeof __workerMain.postMessage;
   Deno: typeof Deno;
+  Tauri: typeof Tauri;
 }
 
 declare const self: DedicatedWorkerGlobalScope & typeof globalThis;
 declare let onmessage: ((e: { data: any }) => Promise<void> | void) | undefined;
 declare let onerror:
   | ((
-      msg: string,
-      source: string,
-      lineno: number,
-      colno: number,
-      e: Event
-    ) => boolean | void)
+    msg: string,
+    source: string,
+    lineno: number,
+    colno: number,
+    e: Event,
+  ) => boolean | void)
   | undefined;
 declare const close: typeof __workerMain.close;
 declare const name: typeof __workerMain.name;
