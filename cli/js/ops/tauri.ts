@@ -13,7 +13,7 @@ export function close(path: Number): void {
   //sendAsync("op_mkdir");
 }
 
-export async function open_webview(
+export async function openWebview(
   options: BrowserOptions,
 ): Promise<Number> {
   console.log("DONE HERE", options);
